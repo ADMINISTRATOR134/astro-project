@@ -36,7 +36,10 @@ async function start() {
     app.use(errorHandler);
 
     // Запуск сервера
-    app.listen(PORT, () => console.log(`✅ Сервер запущен на порту: ${PORT}`));
+    app.listen(PORT, () => {
+      console.log(`✅ Сервер запущен на порту ${PORT}`);
+    });
+    
   } catch (error) {
     console.error('❌ Ошибка запуска сервера:', error.message);
     process.exit(1);
