@@ -1,0 +1,102 @@
+---
+--- 
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Авторизация</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+      }
+
+      .login-form {
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+      }
+
+      .login-form input {
+        margin-bottom: 1rem;
+        padding: 0.8rem;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1rem;
+      }
+
+      .login-form button {
+        padding: 0.8rem;
+        font-size: 1rem;
+        background-color: #333;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      .login-form button:hover {
+        background-color: #555;
+      }
+
+      .message {
+        margin-top: 1rem;
+        text-align: center;
+        color: red;
+      }
+    </style>
+  </head>
+  <body>
+    <form class="login-form" id="loginForm">
+      <input type="email" id="email" placeholder="Введите e-mail" required />
+      <input type="password" id="password" placeholder="Введите пароль" required />
+      <button type="submit">Войти</button>
+      <div class="message" id="message"></div>
+    </form>
+
+    <script>
+      const form = document.getElementById('loginForm');
+      const messageDiv = document.getElementById('message');
+
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        try {
+          const response = await fetch('http://localhost:3000/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email, password })
+          });
+
+          const data = await response.json();
+
+          if (response.ok) {
+            messageDiv.style.color = 'green';
+            messageDiv.textContent = 'Успешный вход!';
+            // можно перекинуть пользователя на другую страницу
+          } else {
+            messageDiv.style.color = 'red';
+            messageDiv.textContent = data.message || 'Ошибка входа.';
+          }
+        } catch (error) {
+          messageDiv.style.color = 'red';
+          messageDiv.textContent = 'Ошибка соединения с сервером.';
+        }
+      });
+    </script>
+  </body>
+</html>
